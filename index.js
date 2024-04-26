@@ -3,6 +3,7 @@ const Hapi = require('@hapi/hapi');
 const UserRoutes = require("./Routes/UserRoute");
 const productRoutes = require("./Routes/ProductRoute");
 const orderRoutes = require("./Routes/OrderRoute");
+const cartRoute = require("./Routes/AddToCartRoute");
 
 
 const server = Hapi.server({
@@ -31,4 +32,5 @@ const init = async () => {
     await server.route(UserRoutes);
     await server.route(productRoutes);
     await server.route(orderRoutes);
+    await server.route(cartRoute);
 }; init();

@@ -7,15 +7,24 @@ const SECRET = "@#$@#%$#CJYC"
 // sign-up users
 const signUp = async (req, h) => {
     try {
-        const { name, email, password } = req.payload;
+        const { name, email, password, mobile, billing_address, shipping_address } = req.payload;
         if (!name) {
-            return h.response({ message: "Please enter your name" });
+            return h.response({ message: "Please enter your name" }).code(404);
         }
         if (!email) {
-            return h.response({ message: "Please enter your email" });
+            return h.response({ message: "Please enter your email" }).code(404);;
         }
         if (!password) {
-            return h.response({ message: "Please enter your password" });
+            return h.response({ message: "Please enter your password" }).code(404);;
+        }
+        if (!mobile) {
+            return h.response({ message: "Please enter mobile" }).code(404);
+        }
+        if (!billing_address) {
+            return h.response({ message: "Please enter your billing_address" }).code(404);
+        }
+        if (!shipping_address) {
+            return h.response({ message: "Please enter shipping_address" }).code(404);
         }
 
         const preUser = await models.User.findOne({ where: { email } });
@@ -25,7 +34,7 @@ const signUp = async (req, h) => {
         } else {
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            const newUser = await models.User.create({ name, email, password: hashedPassword });
+            const newUser = await models.User.create({ name, email, password: hashedPassword, mobile, billing_address, shipping_address });
             return h.response({ message: "Sucessfully sign-up", data: newUser }).code(201);
 
 
@@ -76,16 +85,10 @@ const userOrderHistory = async (req, h) => {
     try {
 
 
-        const user = await models.User.findOne({ where: { email: req.rootUser.email } });
 
-        if (!user) {
-            return h.response({ message: "You have no any order yet!" });
-        } else {
-            // const orderHistory = await models.Orders.findAll({ where: { userId: req.userId } });
-            const orderHistory = await models.Orders.findAll({ where: { userId: user.id } });
+        const orderHistory = await models.Orders.findAll({ where: { userId: req.userId } });
 
-            return h.response({ success: true, data: orderHistory }).code(201);
-        }
+        return h.response({ success: true, data: orderHistory }).code(201);
 
     } catch (error) {
         console.log(error);

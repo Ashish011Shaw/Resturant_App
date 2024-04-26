@@ -8,7 +8,7 @@ const Authentication = async (req, h) => {
         const token = req.headers.authorization;
 
         if (!token) {
-            return h.response({ message: "No token provided" }).code(400);
+            return h.response({status:400, message: "No token provided" });
         } else {
             const verifytoken = jwt.verify(token, SECRET);
             // console.log("Token verification : ", verifytoken)

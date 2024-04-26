@@ -1,29 +1,26 @@
-const orderController = require("../Controller/Order_Controller")
+const cartController = require("../Controller/AddToCartController");
 const { Authentication } = require("../Middleware/Authenticate")
 
 module.exports = [
     {
         method: 'POST',
-        path: '/add-Order',
+        path: '/addToCart',
         options: {
             pre: [
                 { method: Authentication }
             ],
-            handler: orderController.addOrder
-        },
-        // handler: orderController.addOrder
+            handler: cartController.addToCart
+        }
 
     },
     {
         method: 'GET',
-        path: '/getUserCart',
+        path: '/myCartItems',
         options: {
             pre: [
                 { method: Authentication }
             ],
-            handler: orderController.getUserCart
-        },
-        // handler: orderController.getUserCart
+            handler: cartController.myCartItems
+        }
     }
 ]
-
